@@ -26,7 +26,7 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -43,12 +43,12 @@
          <item>
           <widget class="QLabel" name="label">
            <property name="text">
-            <string>文件</string>
+            <string>源文件</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="lineEdit"/>
+          <widget class="QLineEdit" name="input"/>
          </item>
         </layout>
        </item>
@@ -57,19 +57,19 @@
          <item>
           <widget class="QLabel" name="label_2">
            <property name="text">
-            <string>输出目录</string>
+            <string>输出文件</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="output_path"/>
+          <widget class="QLineEdit" name="output"/>
          </item>
         </layout>
        </item>
       </layout>
      </item>
      <item>
-      <widget class="QGraphicsView" name="preview"/>
+      <widget class="QTextEdit" name="outinfo"/>
      </item>
      <item>
       <widget class="QProgressBar" name="progressBar">
