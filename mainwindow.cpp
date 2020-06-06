@@ -63,7 +63,7 @@ void MainWindow::on_pushButton_clicked()
             }
             //			cout << endl << R << " " << G << " " << B << " => " << Gray;
         }
-        file << char(0x00) << char(0x6B) << char(0x00) << char(0x01) << char(0x01) << char(0x02);
+        file << char(0x00) << char(0x80) << char(0x00) << char(0x01) << char(0x01) << char(0x02);
     }
     file.close();
 
