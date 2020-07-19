@@ -6,6 +6,7 @@
 #include <fstream>
 #include <math.h>
 #include <Windows.h>
+#include <QMessageBox>
 using namespace cv;
 using std::ofstream;
 using std::ifstream;
