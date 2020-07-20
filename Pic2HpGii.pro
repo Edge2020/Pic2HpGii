@@ -31,10 +31,10 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 INCLUDEPATH += \
-        D:\opencv\build\include\opencv2  \
-        D:\opencv\build\include\opencv \
+        D:\opencv\build\include\opencv2\
+        D:\opencv\build\include\opencv\
         D:\opencv\build\include
 
 LIBS += \
-        D:\opencv\build\x64\vc14\lib\opencv_world420d.lib \
+        D:\opencv\build\x64\vc14\lib\opencv_world420d.lib
         D:\opencv\build\x64\vc14\lib\opencv_world420.lib

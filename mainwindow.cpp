@@ -128,20 +128,20 @@ void MainWindow::on_pushButton_clicked()
             R = image.at<Vec3b>(y, x)[2];
             G = image.at<Vec3b>(y, x)[1];
             B = image.at<Vec3b>(y, x)[0];
-            Gray = pow((pow(R, 2.2) * 0.2126 + pow(G, 2.2) * 0.7152 + pow(B, 2.2) * 0.0722), (1 / 2.2));
-            if (Gray >= 0 && Gray < 64) {
+            Gray = int(pow((pow(R, 2.2) * 0.2126 + pow(G, 2.2) * 0.7152 + pow(B, 2.2) * 0.0722), (1 / 2.2)));
+            if (Gray >= 0 && Gray < 63) {
                 file.write("0", 1);
-                out.at<uchar>(y, x) = 256;
+                out.at<uchar>(y, x) = 255;
             }
-            if (Gray >= 64 && Gray < 128) {
+            if (Gray >= 63 && Gray < 127) {
                 file.write("3", 1);
-                out.at<uchar>(y, x) = 192;
+                out.at<uchar>(y, x) = 191;
             }
-            if (Gray >= 128 && Gray < 192) {
+            if (Gray >= 127 && Gray < 191) {
                 file.write("2", 1);
-                out.at<uchar>(y, x) = 128;
+                out.at<uchar>(y, x) = 127;
             }
-            if (Gray >= 192 && Gray < 256) {
+            if (Gray >= 191 && Gray < 255) {
                 file.write("1", 1);
                 out.at<uchar>(y, x) = 64;
             }
