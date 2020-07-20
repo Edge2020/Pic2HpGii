@@ -1,6 +1,9 @@
 # Pic2HpGii
 转换图片以在HP39gii上显示4阶灰度图片
 
+程序使用Qt编写,使用了OpenCV库。
+Coding with Qt, used the OpenCV library.
+
 这是一个简单的转换程序。程序将会生成一个"L1.hplist"列表文件，请将其复制到您的HP39GII计算器中，然后您需要在您的计算器中打开配套程序PicViewer(请查看最近的release)，程序将会自动加载图片。
 注意: 如果您在列表1(L1)中有重要数据，请先备份！
 
