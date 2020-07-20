@@ -177,6 +177,8 @@ void MainWindow::on_pushButton_clicked()
 
     namedWindow("PREVIEW", WINDOW_AUTOSIZE);
     imshow("PREVIEW", out);
+    ui->outinfo->setText(ui->outinfo->toPlainText() + "\n\n完成!");
+
 
     }
     else
@@ -191,7 +193,7 @@ void MainWindow::on_pushButton_clicked()
 
 void MainWindow::on_choose_in_clicked()
 {
-     ui->input->setText(QFileDialog::getOpenFileName(this, "", "","*.bmp"));
+     ui->input->setText(QFileDialog::getOpenFileName(this, "", "","*.*"));
 }
 
 

@@ -1,0 +1,55 @@
+EXPORT PicViewer()
+
+BEGIN
+
+RECT_P(0,0,255,128,3,3);
+
+
+
+LOCAL S;
+
+FOR A FROM 0 TO 255 STEP 1 DO
+
+FOR B FROM 0 TO 127 STEP 1 DO
+
+mid(L1(A+1),B+1,1)►S;
+
+
+
+IF S == "1" THEN
+
+PIXON_P(A,B,0);
+
+END;
+
+IF S == "2" THEN
+
+PIXON_P(A,B,1);
+
+END;
+
+IF S == "3" THEN
+
+PIXON_P(A,B,2);
+
+END;
+
+IF S == "4" THEN
+
+PIXON_P(A,B,3);
+
+END;
+
+
+
+
+
+END;
+
+END;
+
+SUBGROB_P(G0,G1);
+WAIT(0);
+
+END;
+
