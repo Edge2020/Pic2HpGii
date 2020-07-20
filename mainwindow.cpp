@@ -85,7 +85,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_pushButton_clicked()
 {
-
+    ui->outinfo->setText("");
     QString inpath,outpath;
     QString temppath = QCoreApplication::applicationDirPath();
     temppath += "/temp.dat";
@@ -105,24 +105,25 @@ void MainWindow::on_pushButton_clicked()
 
     _image = cv::imread(inpath.toStdString(), CV_16F);
 
-    if(_image.cols != 256 || _image.rows != 128){
+   if(_image.cols != 256 || _image.rows != 128){
         cv::resize(_image,image,Size(256,128),0,0,INTER_LINEAR);
-        ui->outinfo->setText("源文件["+inpath+"]\n输出文件["+outpath+"]\n缓存文件["+temppath+"]\n(图片大小自动转换)");
+        ui->outinfo->setText(ui->outinfo->toPlainText() + "\n\n(图片大小自动转换)");
     }
     else{
         image = _image;
     }
-
     Mat out(image.rows, image.cols, CV_8U);
 
     int R, G, B, Gray;
     int x, y;
     x = y = 0;
     ui->outinfo->setText(ui->outinfo->toPlainText() + "\n\n转换灰度...");
+    ui->progressBar->setMinimum(0);
+    ui->progressBar->setMaximum(image.rows*image.cols);
     for (x = 0; x < image.cols; x++) {
         file.write("", 2);
         for (y = image.rows - 1; y >= 0; y--) {
-            ui->progressBar->setValue((x*image.cols+y)/(image.cols*(image.rows-1))*100);
+            ui->progressBar->setValue(x*image.cols+image.rows-y);
             file.write("", 1);
             R = image.at<Vec3b>(y, x)[2];
             G = image.at<Vec3b>(y, x)[1];
@@ -167,7 +168,7 @@ void MainWindow::on_pushButton_clicked()
     }
     for (int i = 1; i < size + 1; i++) {
         final << char(temp[size - i]);
-        ui->progressBar->setValue(i/size*100);
+        ui->progressBar->setValue(i);
     }
     final.close();
     change.close();

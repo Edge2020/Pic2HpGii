@@ -31,7 +31,7 @@
      <rect>
       <x>10</x>
       <y>0</y>
-      <width>781</width>
+      <width>782</width>
       <height>541</height>
      </rect>
     </property>
@@ -83,23 +83,30 @@
       </layout>
      </item>
      <item>
-      <spacer name="horizontalSpacer">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>By Edge2020                                                        [github.com/Edge2020/Pic2HpGii]</string>
        </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
+      </widget>
      </item>
      <item>
-      <widget class="QTextEdit" name="outinfo"/>
+      <widget class="QTextEdit" name="outinfo">
+       <property name="acceptDrops">
+        <bool>true</bool>
+       </property>
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QProgressBar" name="progressBar">
+       <property name="layoutDirection">
+        <enum>Qt::LeftToRight</enum>
+       </property>
+       <property name="autoFillBackground">
+        <bool>true</bool>
+       </property>
        <property name="value">
         <number>24</number>
        </property>
