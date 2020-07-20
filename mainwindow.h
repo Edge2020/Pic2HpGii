@@ -7,6 +7,9 @@
 #include <math.h>
 #include <Windows.h>
 #include <QMessageBox>
+#include <QFileDialog>
+#include <cstdio>
+#include <stdlib.h>
 using namespace cv;
 using std::ofstream;
 using std::ifstream;
@@ -27,7 +30,13 @@ public:
 private slots:
     void on_pushButton_clicked();
 
+    void on_choose_in_clicked();
+
+    void on_choose_out_clicked();
+
 private:
     Ui::MainWindow *ui;
 };
+
+
 #endif // MAINWINDOW_H
