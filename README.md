@@ -17,3 +17,10 @@ The way to copy files to calculator:
 https://tieba.baidu.com/p/6016731864
 https://tieba.baidu.com/p/6324687299
 (Chinese)
+
+
+计算器模拟器的文件存储位置:
+
+The file path of calculator simulator:
+
+C:\Users\%username%\AppData\Roaming\HP39gII
