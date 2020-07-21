@@ -16,25 +16,25 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    main.cpp \
-    mainwindow.cpp
+    main.cpp\
+    mainwindow.cpp\
 
 HEADERS += \
-    mainwindow.h
+    mainwindow.h\
 
 FORMS += \
-    mainwindow.ui
+    mainwindow.ui\
+
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
-INCLUDEPATH += \
-        D:\opencv\build\include\opencv2\
-        D:\opencv\build\include\opencv\
-        D:\opencv\build\include
 
-LIBS += \
-        D:\opencv\build\x64\vc14\lib\opencv_world420d.lib
-        D:\opencv\build\x64\vc14\lib\opencv_world420.lib
+
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../opencv/build/x64/vc15/lib/ -lopencv_world420
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../opencv/build/x64/vc15/lib/ -lopencv_world420d
+
+INCLUDEPATH += $$PWD/../../../opencv/build/include
+DEPENDPATH += $$PWD/../../../opencv/build/include
