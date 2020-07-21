@@ -38,9 +38,9 @@ void MainWindow::on_pushButton_clicked()
 
     ui->outinfo->setText("源文件["+inpath+"]\n输出文件["+outpath+"]\n缓存文件["+temppath+"]");
 
-    Mat oimage,image;
+    Mat oimage, image;
 
-    oimage = cv::imread(inpath.toStdString(), CV_64F);
+    oimage = cv::imread(inpath.toStdString(), CV_8SC3);
 
    if(oimage.cols != 256 || oimage.rows != 128){
         cv::resize(oimage,image,Size(256,128),0,0,cv::INTER_LINEAR);
@@ -55,8 +55,7 @@ void MainWindow::on_pushButton_clicked()
     }
 
 
-    Mat out(image.rows, image.cols, CV_8U);
-
+    Mat out(image.rows, image.cols, CV_8SC1);
 
 
     int R, G, B, Gray;
@@ -64,7 +63,7 @@ void MainWindow::on_pushButton_clicked()
     x = y = 0;
     ui->outinfo->setText(ui->outinfo->toPlainText() + "\n\n转换灰度...");
     ui->progressBar->setMinimum(0);
-    ui->progressBar->setMaximum(image.rows*image.cols);
+    ui->progressBar->setMaximum((image.rows-1)*image.cols);
     for (x = 0; x < image.cols; x++) {
         file.write("", 2);
         for (y = image.rows - 1; y >= 0; y--) {
@@ -74,21 +73,21 @@ void MainWindow::on_pushButton_clicked()
             G = image.at<Vec3b>(y, x)[1];
             B = image.at<Vec3b>(y, x)[0];
             Gray = int(pow((pow(R, 2.2) * 0.2126 + pow(G, 2.2) * 0.7152 + pow(B, 2.2) * 0.0722), (1 / 2.2)));
-            if (Gray >= 0 && Gray < 63) {
-                file.write("0", 1);
-                out.at<uchar>(y, x) = 255;
-            }
-            if (Gray >= 63 && Gray < 127) {
-                file.write("3", 1);
-                out.at<uchar>(y, x) = 191;
-            }
-            if (Gray >= 127 && Gray < 191) {
+            if (Gray >= 0 && Gray <= 63) {
                 file.write("2", 1);
+                out.at<uchar>(y, x) = 63;
+            }
+            if (Gray >= 64 && Gray <= 127) {
+                file.write("3", 1);
                 out.at<uchar>(y, x) = 127;
             }
-            if (Gray >= 191 && Gray < 255) {
+            if (Gray >= 128 && Gray <= 191) {
+                file.write("0", 1);
+                out.at<uchar>(y, x) = 191;
+            }
+            if (Gray >= 192 && Gray <= 255) {
                 file.write("1", 1);
-                out.at<uchar>(y, x) = 64;
+                out.at<uchar>(y, x) = 255   ;
             }
             //			cout << endl << R << " " << G << " " << B << " => " << Gray;
         }
@@ -126,7 +125,7 @@ void MainWindow::on_pushButton_clicked()
     ui->outinfo->setText(ui->outinfo->toPlainText() + "\n\n完成!");
     finish = clock();
     QString UsedTime = QString::fromStdString(std::to_string(int(finish - start)));
-    ui->outinfo->setText(ui->outinfo->toPlainText() + "\nUsed time: " + UsedTime + "ms");
+    ui->outinfo->setText(ui->outinfo->toPlainText() + "\n用时:" + UsedTime + "ms");
     }
     else
     {

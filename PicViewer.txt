@@ -16,25 +16,25 @@ mid(L1(A+1),B+1,1)►S;
 
 
 
-IF S == "1" THEN
+IF S == "0" THEN
 
 PIXON_P(A,B,0);
 
 END;
 
-IF S == "2" THEN
+IF S == "1" THEN
 
 PIXON_P(A,B,1);
 
 END;
 
-IF S == "3" THEN
+IF S == "2" THEN
 
 PIXON_P(A,B,2);
 
 END;
 
-IF S == "4" THEN
+IF S == "3" THEN
 
 PIXON_P(A,B,3);
 
