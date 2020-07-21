@@ -23,4 +23,4 @@ https://tieba.baidu.com/p/6324687299
 
 The file path of calculator simulator:
 
-C:\Users\%username%\AppData\Roaming\HP39gII
+C:\Users\\%username%\AppData\Roaming\HP39gII
