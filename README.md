@@ -1,12 +1,6 @@
 # Pic2HpGii
 转换图片以在HP39gii上显示4阶灰度图片
 
-
-[请在本地配置好OpenCV并确认环境变量无误]
-
-[Please install OpenCV library on your system]
-
-
 程序使用Qt编写,使用了OpenCV库。
 Coding with Qt, used the OpenCV library.
 
