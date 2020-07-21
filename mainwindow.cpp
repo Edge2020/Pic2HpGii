@@ -20,6 +20,8 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_pushButton_clicked()
 {
+    clock_t start,finish;
+    start = clock();
     ui->outinfo->setText("");
     QString inpath,outpath;
     QString temppath = QCoreApplication::applicationDirPath();
@@ -122,8 +124,9 @@ void MainWindow::on_pushButton_clicked()
     namedWindow("PREVIEW", WINDOW_AUTOSIZE);
     imshow("PREVIEW", out);
     ui->outinfo->setText(ui->outinfo->toPlainText() + "\n\n完成!");
-
-
+    finish = clock();
+    QString UsedTime = QString::fromStdString(std::to_string(int(finish - start)));
+    ui->outinfo->setText(ui->outinfo->toPlainText() + "\nUsed time: " + UsedTime + "ms");
     }
     else
     {

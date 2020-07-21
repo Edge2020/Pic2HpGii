@@ -38,3 +38,5 @@ else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../opencv/build/x
 
 INCLUDEPATH += $$PWD/../../../opencv/build/include
 DEPENDPATH += $$PWD/../../../opencv/build/include
+
+RC_ICONS = Icon.ico
