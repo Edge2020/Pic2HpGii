@@ -22,7 +22,6 @@ void MainWindow::on_pushButton_clicked()
 {
     clock_t start,finish;
     start = clock();
-    ui->outinfo->setText("");
     QString inpath,outpath;
     QString temppath = QCoreApplication::applicationDirPath();
     temppath += "/temp.dat";
@@ -36,7 +35,7 @@ void MainWindow::on_pushButton_clicked()
 
     ofstream file(temppath.toStdString(), ios::out | ios::binary);
 
-    ui->outinfo->setText("源文件["+inpath+"]\n输出文件["+outpath+"]\n缓存文件["+temppath+"]");
+    ui->outinfo->setText(ui->outinfo->toPlainText() + "源文件["+inpath+"]\n输出文件["+outpath+"]\n缓存文件["+temppath+"]");
 
     Mat oimage, image;
 
@@ -125,15 +124,15 @@ void MainWindow::on_pushButton_clicked()
     ui->outinfo->setText(ui->outinfo->toPlainText() + "\n\n完成!");
     finish = clock();
     QString UsedTime = QString::fromStdString(std::to_string(int(finish - start)));
-    ui->outinfo->setText(ui->outinfo->toPlainText() + "\n用时:" + UsedTime + "ms");
+    ui->outinfo->setText(ui->outinfo->toPlainText() + "\n用时:" + UsedTime + "ms\n\n");
     }
     else
     {
-        ui->outinfo->setText("文件打开失败");
+        ui->outinfo->setText(ui->outinfo->toPlainText() + "\n文件打开失败\n");
     }
   }
     else{
-        ui->outinfo->setText("输入不能为空");
+        ui->outinfo->setText(ui->outinfo->toPlainText() + "\n输入不能为空\n");
     }
 }
 
