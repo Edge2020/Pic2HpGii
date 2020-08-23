@@ -92,7 +92,7 @@ void MainWindow::on_pushButton_clicked()
         }
         file << char(0x00) << char(0x80) << char(0x00) << char(0x01) << char(0x01) << char(0x02);
     }
-        imwrite("d:/1.jpg",out);
+   //     imwrite("d:/1.jpg",out);
     file.close();
     addinfo("Done");
 
