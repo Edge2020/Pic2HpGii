@@ -3,7 +3,6 @@
 
 using namespace cv;
 
-
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -35,7 +34,7 @@ void MainWindow::on_pushButton_clicked()
 
     ofstream file(temppath.toStdString(), ios::out | ios::binary);
 
-    ui->outinfo->setText(ui->outinfo->toPlainText() + "源文件["+inpath+"]\n输出文件["+outpath+"]\n缓存文件["+temppath+"]");
+    addinfo("源文件["+inpath+"]\n输出文件["+outpath+"]\n缓存文件["+temppath+"]");
 
     Mat oimage, image;
 
@@ -44,9 +43,9 @@ void MainWindow::on_pushButton_clicked()
    if(oimage.cols != 256 || oimage.rows != 128){
         cv::resize(oimage,image,Size(256,128),0,0,cv::INTER_LINEAR);
 
-        ui->outinfo->setText(ui->outinfo->toPlainText() + "\n\n转换图片大小...Done");
+        addinfo("\n\n转换图片大小...Done");
         if((oimage.cols/oimage.rows)!=2){
-           ui->outinfo->setText(ui->outinfo->toPlainText() + "\n[图片被拉伸]");
+            addinfo("\n[图片被拉伸]");
         }
     }
     else{
@@ -54,13 +53,13 @@ void MainWindow::on_pushButton_clicked()
     }
 
 
-    Mat out(image.rows, image.cols, CV_8SC1);
+    Mat out(image.rows, image.cols, CV_8UC1);
 
 
     int R, G, B, Gray;
     int x, y;
     x = y = 0;
-    ui->outinfo->setText(ui->outinfo->toPlainText() + "\n\n转换灰度...");
+    addinfo("\n\n转换灰度...");
     ui->progressBar->setMinimum(0);
     ui->progressBar->setMaximum((image.rows-1)*image.cols);
     for (x = 0; x < image.cols; x++) {
@@ -68,34 +67,36 @@ void MainWindow::on_pushButton_clicked()
         for (y = image.rows - 1; y >= 0; y--) {
             ui->progressBar->setValue(x*image.cols+image.rows-y);
             file.write("", 1);
-            R = image.at<Vec3b>(y, x)[2];
+            R = image.at<Vec3b>(y, x)[0];
             G = image.at<Vec3b>(y, x)[1];
-            B = image.at<Vec3b>(y, x)[0];
-            Gray = int(pow((pow(R, 2.2) * 0.2126 + pow(G, 2.2) * 0.7152 + pow(B, 2.2) * 0.0722), (1 / 2.2)));
-            if (Gray >= 0 && Gray <= 63) {
-                file.write("2", 1);
-                out.at<uchar>(y, x) = 63;
-            }
-            if (Gray >= 64 && Gray <= 127) {
-                file.write("3", 1);
-                out.at<uchar>(y, x) = 127;
-            }
-            if (Gray >= 128 && Gray <= 191) {
+            B = image.at<Vec3b>(y, x)[2];
+            Gray = (R*30 + G*59 + B*11 + 50)/100;
+            if (Gray >= 0 && Gray < 64) {
                 file.write("0", 1);
-                out.at<uchar>(y, x) = 191;
+                out.at<uchar>(y, x) = 0;
             }
-            if (Gray >= 192 && Gray <= 255) {
+            else if (Gray >= 64 && Gray < 128) {
                 file.write("1", 1);
-                out.at<uchar>(y, x) = 255   ;
+                out.at<uchar>(y, x) = 64;
             }
+            else if (Gray >= 128 && Gray < 192) {
+                file.write("2", 1);
+                out.at<uchar>(y, x) = 128;
+            }
+            else if (Gray >= 192 && Gray < 256) {
+                file.write("3", 1);
+                out.at<uchar>(y, x) = 192;
+            }
+
             //			cout << endl << R << " " << G << " " << B << " => " << Gray;
         }
         file << char(0x00) << char(0x80) << char(0x00) << char(0x01) << char(0x01) << char(0x02);
     }
+        imwrite("d:/1.jpg",out);
     file.close();
-    ui->outinfo->setText(ui->outinfo->toPlainText() + "Done");
+    addinfo("Done");
 
-    ui->outinfo->setText(ui->outinfo->toPlainText() + "\n处理数据...");
+    addinfo("\n处理数据...");
     ifstream change;
     change.open(temppath.toStdString(), ios::in | ios::binary);
     int size = (image.rows * 2 + 8) * image.cols;
@@ -117,22 +118,21 @@ void MainWindow::on_pushButton_clicked()
     change.close();
 
     delete[] temp;
-    ui->outinfo->setText(ui->outinfo->toPlainText() + "Done");
 
+    addinfo("Done");
     namedWindow("PREVIEW", WINDOW_AUTOSIZE);
     imshow("PREVIEW", out);
-    ui->outinfo->setText(ui->outinfo->toPlainText() + "\n\n完成!");
+    addinfo("\n\n完成!");
     finish = clock();
-    QString UsedTime = QString::fromStdString(std::to_string(int(finish - start)));
-    ui->outinfo->setText(ui->outinfo->toPlainText() + "\n用时:" + UsedTime + "ms\n\n");
+    addinfo("\n用时:" + QString::fromStdString(std::to_string(int(finish - start))) + "ms\n\n");
     }
     else
     {
-        ui->outinfo->setText(ui->outinfo->toPlainText() + "\n文件打开失败\n");
+        addinfo("\n文件打开失败\n");
     }
   }
     else{
-        ui->outinfo->setText(ui->outinfo->toPlainText() + "\n输入不能为空\n");
+        addinfo("\n输入不能为空\n");
     }
 }
 
@@ -155,4 +155,8 @@ void MainWindow::on_choose_out_clicked()
         ui->output->setText(temp + "/L1.hplist");
     }
     }
+}
+
+inline void MainWindow::addinfo(QString s){
+    ui->outinfo->setText(ui->outinfo->toPlainText() + s);
 }

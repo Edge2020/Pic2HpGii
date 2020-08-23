@@ -17,6 +17,8 @@ using std::ofstream;
 using std::ifstream;
 using std::ios;
 
+
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -35,6 +37,8 @@ private slots:
     void on_choose_in_clicked();
 
     void on_choose_out_clicked();
+
+    inline void addinfo(QString s);
 
 private:
     Ui::MainWindow *ui;
@@ -107,6 +111,7 @@ const int head[1032] = {
     0x20, 0x59, 0xC4, 0x05, 0x10, 0x58, 0xC4, 0x05, 0x00, 0x57, 0xC4, 0x05, 0xF0, 0x55, 0xC4, 0x05,
     0xE0, 0x54, 0xC4, 0x05, 0x58, 0x4F, 0xC4, 0x05
 };
+
 
 
 #endif // MAINWINDOW_H
