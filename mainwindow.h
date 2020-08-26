@@ -11,6 +11,7 @@
 #include <cstdio>
 #include <stdlib.h>
 #include <chrono>
+#include <QGraphicsSimpleTextItem>
 //#include <QDebug>
 
 using std::ofstream;
@@ -40,8 +41,14 @@ private slots:
 
     inline void addinfo(QString s);
 
+    void on_outinfo_textChanged();
+
 private:
     Ui::MainWindow *ui;
+
+    QMenu* menu;
+
+    QAction* rc1;
 };
 
 const int head[1032] = {

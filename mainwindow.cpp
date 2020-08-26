@@ -8,7 +8,29 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
     ui->progressBar->reset();
+    ui->img_in->setSceneRect(0,0,357,183);
+    ui->img_out->setSceneRect(0,0,357,183);
+
+    QGraphicsScene* sp = new QGraphicsScene;
+    QGraphicsSimpleTextItem* text = new QGraphicsSimpleTextItem;
+    text->setText("等待转换");
+    text->setFont(QFont("等线",16));
+    sp->addItem(text);
+    ui->img_out->setScene(sp);
+
+    QGraphicsScene* sp2 = new QGraphicsScene;
+    QGraphicsSimpleTextItem* text2 = new QGraphicsSimpleTextItem;
+    text2->setText("等待选择");
+    text2->setFont(QFont("等线",16));
+    sp2->addItem(text2);
+    ui->img_in->setScene(sp2);
+
+    ui->img_out->setContextMenuPolicy(Qt::CustomContextMenu);
+    rc1 = new QAction("Save",this);
+    menu = new QMenu(this);
+    menu->addAction(rc1);
 }
 
 MainWindow::~MainWindow()
@@ -23,7 +45,6 @@ void MainWindow::on_pushButton_clicked()
     start = clock();
     QString inpath,outpath;
     QString temppath = QCoreApplication::applicationDirPath();
-    temppath += "/temp.dat";
     inpath = ui->input->text();
     outpath = ui->output->text();
 
@@ -32,9 +53,9 @@ void MainWindow::on_pushButton_clicked()
     ifstream test(inpath.toStdString());
     if(test.good()){
 
-    ofstream file(temppath.toStdString(), ios::out | ios::binary);
+    ofstream file((temppath + "/temp.dat").toStdString(), ios::out | ios::binary);
 
-    addinfo("源文件["+inpath+"]\n输出文件["+outpath+"]\n缓存文件["+temppath+"]");
+    addinfo("源文件["+inpath+"]\n输出文件["+outpath+"]\n缓存目录["+temppath+"]");
 
     Mat oimage, image;
 
@@ -92,15 +113,22 @@ void MainWindow::on_pushButton_clicked()
         }
         file << char(0x00) << char(0x80) << char(0x00) << char(0x01) << char(0x01) << char(0x02);
     }
-   //     imwrite("d:/1.jpg",out);
+    imwrite((temppath + "/temp.jpg").toStdString(),out);
+
+    connect(ui->img_out,&QGraphicsView::customContextMenuRequested,[=]{menu->exec(QCursor::pos());});
+    connect(rc1,&QAction::triggered,[=](){
+        QString temp = QFileDialog::getExistingDirectory(this,"");
+        imwrite((temp + "/out.jpg").toStdString(),out);
+    });
+
     file.close();
     addinfo("Done");
 
     addinfo("\n处理数据...");
     ifstream change;
-    change.open(temppath.toStdString(), ios::in | ios::binary);
+    change.open((temppath + "/temp.dat").toStdString(), ios::in | ios::binary);
     int size = (image.rows * 2 + 8) * image.cols;
-    char* temp = new char[size];
+    char* temp = new char[static_cast<unsigned long>(size)];
     for (int i = 0; i < size; i++) {
         change.read(temp, size);
         ui->progressBar->setValue(i/size*100);
@@ -120,32 +148,58 @@ void MainWindow::on_pushButton_clicked()
     delete[] temp;
 
     addinfo("Done");
-    namedWindow("PREVIEW", WINDOW_AUTOSIZE);
-    imshow("PREVIEW", out);
+
+    QGraphicsScene* img_out = new QGraphicsScene();
+    img_out->addPixmap(QPixmap(temppath + "/temp.jpg").scaled(357,183));
+    ui->img_out->setScene(img_out);
+
     addinfo("\n\n完成!");
     finish = clock();
     addinfo("\n用时:" + QString::fromStdString(std::to_string(int(finish - start))) + "ms\n\n");
     }
     else
     {
-        addinfo("\n文件打开失败\n");
+        addinfo("\n文件打开失败,请检查路径是否有中文\n");
     }
   }
     else{
         addinfo("\n输入不能为空\n");
     }
+
 }
 
 void MainWindow::on_choose_in_clicked()
 {
-     ui->input->setText(QFileDialog::getOpenFileName(this, "", "","*.*"));
-}
+    ui->img_out->disconnect();
+    rc1->disconnect();
+    QGraphicsScene* sp = new QGraphicsScene;
+    QGraphicsSimpleTextItem* text = new QGraphicsSimpleTextItem;
+    text->setText("等待转换");
+    sp->addItem(text);
+    text->setFont(QFont("等线",16));
+    ui->img_out->setScene(sp);
 
+    ui->input->setText(QFileDialog::getOpenFileName(this, "", "","*.*"));
+    QGraphicsScene* img_in = new QGraphicsScene();
+    img_in->addPixmap(QPixmap(ui->input->text()).scaled(357,183));
+    ui->img_in->setScene(img_in);
+
+    if(ui->input->text() == ""){
+        QGraphicsScene* sp2 = new QGraphicsScene;
+        QGraphicsSimpleTextItem* text2 = new QGraphicsSimpleTextItem;
+        text2->setText("等待选择");
+        text2->setFont(QFont("等线",16));
+        sp2->addItem(text2);
+        ui->img_in->setScene(sp2);
+    }
+}
 
 
 
 void MainWindow::on_choose_out_clicked()
 {
+    ui->img_out->disconnect();
+    rc1->disconnect();
     QString temp = QFileDialog::getExistingDirectory(this,"");
     if(temp.length() != 0){
     if(temp.length() == 3){
@@ -159,4 +213,9 @@ void MainWindow::on_choose_out_clicked()
 
 inline void MainWindow::addinfo(QString s){
     ui->outinfo->setText(ui->outinfo->toPlainText() + s);
+}
+
+void MainWindow::on_outinfo_textChanged()
+{
+    ui->outinfo->moveCursor(QTextCursor::End);
 }
