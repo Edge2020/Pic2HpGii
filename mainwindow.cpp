@@ -12,6 +12,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->progressBar->reset();
     ui->img_in->setSceneRect(0,0,357,183);
     ui->img_out->setSceneRect(0,0,357,183);
+    ui->progressBar->hide();
 
     QGraphicsScene* sp = new QGraphicsScene;
     QGraphicsSimpleTextItem* text = new QGraphicsSimpleTextItem;
@@ -28,7 +29,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->img_in->setScene(sp2);
 
     ui->img_out->setContextMenuPolicy(Qt::CustomContextMenu);
-    rc1 = new QAction("Save",this);
+    rc1 = new QAction("保存",this);
     menu = new QMenu(this);
     menu->addAction(rc1);
 }
@@ -76,6 +77,9 @@ void MainWindow::on_pushButton_clicked()
 
     Mat out(image.rows, image.cols, CV_8UC1);
 
+    ui->horizontalSpacer->changeSize(0,0);
+    ui->progressBar->show();
+
 
     int R, G, B, Gray;
     int x, y;
@@ -118,7 +122,11 @@ void MainWindow::on_pushButton_clicked()
     connect(ui->img_out,&QGraphicsView::customContextMenuRequested,[=]{menu->exec(QCursor::pos());});
     connect(rc1,&QAction::triggered,[=](){
         QString temp = QFileDialog::getExistingDirectory(this,"");
-        imwrite((temp + "/out.jpg").toStdString(),out);
+        if(imwrite((temp + "/out.jpg").toStdString(),out)){
+            QMessageBox::information(nullptr, "", "保存成功", QMessageBox::Ok);
+        }else{
+            QMessageBox::information(nullptr, "", "保存失败", QMessageBox::Ok);
+        }
     });
 
     file.close();
@@ -165,7 +173,8 @@ void MainWindow::on_pushButton_clicked()
     else{
         addinfo("\n输入不能为空\n");
     }
-
+    ui->progressBar->hide();
+    ui->horizontalSpacer->changeSize(40,29);
 }
 
 void MainWindow::on_choose_in_clicked()
