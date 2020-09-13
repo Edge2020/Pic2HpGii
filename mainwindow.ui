@@ -45,19 +45,24 @@
            <item>
             <widget class="QLabel" name="label">
              <property name="text">
-              <string>源文件</string>
+              <string>源文件  </string>
              </property>
             </widget>
            </item>
            <item>
             <widget class="QPushButton" name="choose_in">
              <property name="text">
-              <string>打开</string>
+              <string>选择</string>
              </property>
             </widget>
            </item>
            <item>
             <widget class="QLineEdit" name="input">
+             <property name="font">
+              <font>
+               <underline>false</underline>
+              </font>
+             </property>
              <property name="readOnly">
               <bool>true</bool>
              </property>
