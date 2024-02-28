@@ -21,6 +21,6 @@ https://tieba.baidu.com/p/6324687299
 
 计算器模拟器的文件存储位置:
 
-The file path of calculator simulator:
+The file path of calculator emulator:
 
 C:\Users\\%username%\AppData\Roaming\HP39gII
